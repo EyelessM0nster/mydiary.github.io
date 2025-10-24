@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ЛИЧНЫЙ ДНЕВНИК</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600&family=Cormorant+Garamond:wght@700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="theme-nature">
+    <div class="container">
+        <!-- Экран авторизации -->
+        <div id="authScreen" class="auth-screen">
+            <div class="auth-card">
+                <i class="auth-icon fas fa-book"></i>
+                
+                <!-- Форма входа -->
+                <div id="loginForm">
+                    <h1 class="auth-title">ЛИЧНЫЙ ДНЕВНИК</h1>
+                    <p class="auth-subtitle">Ваш личный уголок для мыслей и воспоминаний</p>
+                    
+                    <div class="auth-input-group">
+                        <label class="auth-label">Имя пользователя</label>
+                        <input type="text" class="auth-input" id="loginUsername" placeholder="Введите ваш логин">
+                    </div>
+                    
+                    <div class="auth-input-group">
+                        <label class="auth-label">Пароль</label>
+                        <div class="password-input-container">
+                            <input type="password" class="auth-input" id="loginPassword" placeholder="Введите ваш пароль">
+                            <button type="button" class="password-toggle" id="loginPasswordToggle">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="auth-input-group">
+                        <label class="auth-label" style="display: flex; align-items: center; gap: 8px;">
+                            <input type="checkbox" id="rememberMe" checked>
+                            Запомнить меня на этом устройстве
+                        </label>
+                    </div>
+                    
+                    <button class="auth-btn" onclick="login()">
+                        <i class="fas fa-sign-in-alt"></i>
+                        Продолжить
+                    </button>
+                    
+                    <button class="auth-switch" onclick="showRegister()">Создать новый аккаунт</button>
+                    
+                    <div class="auth-footer">
+                        Нажимая "Продолжить", вы принимаете пользовательское соглашение и политику конфиденциальности.
+                    </div>
+                </div>
+
+                <!-- Форма регистрации -->
+                <div id="registerForm" class="hidden">
+                    <h1 class="auth-title">Создание аккаунта</h1>
+                    <p class="auth-subtitle">Ваш логин будет использоваться для входа в аккаунт</p>
+                    
+                    <div class="auth-input-group">
+                        <label class="auth-label">Имя пользователя</label>
+                        <input type="text" class="auth-input" id="regUsername" placeholder="Придумайте логин">
+                    </div>
+                    
+                    <div class="auth-input-group">
+                        <label class="auth-label">Пароль</label>
+                        <div class="password-input-container">
+                            <input type="password" class="auth-input" id="regPassword" placeholder="Придумайте пароль">
+                            <button type="button" class="password-toggle" id="regPasswordToggle">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="auth-input-group">
+                        <label class="auth-label">Повторите пароль</label>
+                        <div class="password-input-container">
+                            <input type="password" class="auth-input" id="regConfirmPassword" placeholder="Повторите пароль">
+                            <button type="button" class="password-toggle" id="regConfirmPasswordToggle">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="auth-input-group">
+                        <label class="auth-label" style="display: flex; align-items: center; gap: 8px;">
+                            <input type="checkbox" id="rememberMeReg" checked>
+                            Запомнить меня на этом устройстве
+                        </label>
+                    </div>
+                    
+                    <button class="auth-btn" onclick="register()">
+                        <i class="fas fa-user-plus"></i>
+                        Создать аккаунт
+                    </button>
+                    
+                    <button class="auth-switch" onclick="showLogin()">Уже есть аккаунт? Войти</button>
+                    
+                    <div class="auth-footer">
+                        Нажимая "Создать аккаунт", вы принимаете пользовательское соглашение и политику конфиденциальности.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Основной интерфейс дневника -->
+        <div id="diaryApp" class="diary-app hidden">
+            <!-- Шапка приложения -->
+            <header class="app-header">
+                <div class="app-title">ЛИЧНЫЙ ДНЕВНИК</div>
+                <div class="user-info">
+                    <span>Привет, <span id="currentUsername">Пользователь</span>!</span>
+                    <button class="logout-btn" onclick="logout()">
+                        <i class="fas fa-sign-out-alt"></i>
+                        Выйти
+                    </button>
+                </div>
+            </header>
+
+            <!-- Основной контент -->
+            <div class="app-content">
+                <!-- Сайдбар -->
+                <aside class="sidebar">
+                    <div class="sidebar-section">
+                        <div class="sidebar-title">
+                            <i class="fas fa-compass"></i>
+                            Навигация
+                        </div>
+                        <div class="sidebar-nav">
+                            <div class="nav-item active" onclick="showAllEntries()">
+                                <i class="nav-icon fas fa-book"></i>
+                                Все записи
+                            </div>
+                            <div class="nav-item" onclick="showFavorites()">
+                                <i class="nav-icon fas fa-star"></i>
+                                Избранное
+                            </div>
+                            <div class="nav-item" onclick="showSettings()">
+                                <i class="nav-icon fas fa-cog"></i>
+                                Настройки
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="sidebar-section">
+                        <div class="sidebar-title">
+                            <i class="fas fa-tag"></i>
+                            Теги
+                        </div>
+                        <div class="sidebar-tags" id="tagsContainer">
+                            <!-- Теги будут добавляться динамически -->
+                        </div>
+                        <div class="add-tag-form">
+                            <input type="text" class="add-tag-input" id="newTagInput" placeholder="Новый тег">
+                            <button class="add-tag-btn" onclick="addNewTag()">
+                                <i class="fas fa-plus"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="sidebar-section">
+                        <div class="sidebar-title">
+                            <i class="fas fa-chart-bar"></i>
+                            Статистика
+                        </div>
+                        <div class="stats">
+                            <div>Всего записей: <span id="entriesCount">0</span></div>
+                            <div>За месяц: <span id="monthEntries">0</span></div>
+                            <div>За неделю: <span id="weekEntries">0</span></div>
+                            <div>Избранных: <span id="favoritesCount">0</span></div>
+                        </div>
+                    </div>
+                </aside>
+
+                <!-- Основная область контента -->
+                <main class="main-content">
+                    <div class="content-header">
+                        <h1 class="page-title" id="pageTitle">Мои записи</h1>
+                    </div>
+
+                    <!-- Поиск -->
+                    <div class="search-container">
+                        <input type="text" class="search-input" id="searchInput" placeholder="Поиск по заголовку и содержанию...">
+                        <button class="search-clear" id="searchClear" onclick="clearSearch()">
+                            <i class="fas fa-times"></i>
+                        </button>
+                        <i class="search-icon fas fa-search"></i>
+                    </div>
+
+                    <div class="filter-nav">
+                        <div class="filter-item active" onclick="filterByTime('all')">Все</div>
+                        <div class="filter-item" onclick="filterByTime('today')">Сегодня</div>
+                        <div class="filter-item" onclick="filterByTime('yesterday')">Вчера</div>
+                        <div class="filter-item" onclick="filterByTime('week')">Неделя</div>
+                        <div class="filter-item" onclick="filterByTime('month')">Месяц</div>
+                    </div>
+
+                    <div class="entries-container" id="entriesContainer">
+                        <!-- Записи будут добавляться сюда через JavaScript -->
+                    </div>
+                </main>
+            </div>
+
+            <!-- Кнопка добавления -->
+            <button class="fab" onclick="openEditor()">
+                <i class="fas fa-plus"></i>
+            </button>
+
+            <!-- Модальное окно редактора -->
+            <div class="modal" id="editorModal">
+                <div class="modal-content">
+                    <h2 class="modal-title" id="editorTitle">
+                        <i class="fas fa-edit"></i>
+                        Новая запись
+                    </h2>
+                    <div class="form-group">
+                        <label class="form-label" for="entryTitle">Заголовок</label>
+                        <input type="text" class="form-input" id="entryTitle" placeholder="О чем эта запись?">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="entryContent">Содержание</label>
+                        <textarea class="form-input form-textarea" id="entryContent" placeholder="Расскажите о вашем дне... (необязательно)"></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Эмоция записи</label>
+                        <div class="emotion-selector" id="emotionSelector">
+                            <!-- Эмоции будут добавляться динамически -->
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Теги</label>
+                        <div class="tags-selector" id="tagsSelector">
+                            <!-- Теги будут добавляться динамически -->
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Изображения и GIF</label>
+                        <div class="image-upload-area" id="imageUploadArea">
+                            <i class="upload-icon fas fa-cloud-upload-alt"></i>
+                            <p class="upload-text">Перетащите сюда изображения или GIF, или нажмите для выбора</p>
+                            <button class="upload-btn" onclick="document.getElementById('imageInput').click()">
+                                <i class="fas fa-image"></i> Выбрать файлы
+                            </button>
+                            <input type="file" id="imageInput" multiple accept="image/*, .gif" style="display: none;">
+                        </div>
+                        <div class="image-preview-container" id="imagePreviewContainer">
+                            <!-- Превью изображений будут добавляться здесь -->
+                        </div>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button class="btn btn-secondary" onclick="closeEditor()">
+                            <i class="fas fa-times"></i>
+                            Отмена
+                        </button>
+                        <button class="btn btn-primary" onclick="saveEntry()">
+                            <i class="fas fa-save"></i>
+                            Сохранить
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Модальное окно настроек -->
+            <div class="modal" id="settingsModal">
+                <div class="modal-content">
+                    <h2 class="modal-title">
+                        <i class="fas fa-cog"></i>
+                        Настройки дневника
+                    </h2>
+                    
+                    <div class="settings-group">
+                        <label class="settings-label">Тема оформления</label>
+                        <select class="settings-select" id="themeSelect" onchange="changeTheme(this.value)">
+                            <option value="nature">Природная</option>
+                            <option value="dark-nature">Темная природная</option>
+                            <option value="earth">Земная</option>
+                            <option value="dark-earth">Темная земная</option>
+                            <option value="mystic">Мистическая</option>
+                            <option value="dark-mystic">Темная мистическая</option>
+                            <option value="ocean">Океанская</option>
+                            <option value="dark-ocean">Темная океанская</option>
+                            <option value="lavender-sky">Небесная лаванда</option>
+                            <option value="dark-lavender">Темная лаванда</option>
+                        </select>
+                    </div>
+                    
+                    <div class="settings-group">
+                        <label class="settings-label">Размер текста</label>
+                        <select class="settings-select" id="fontSizeSelect" onchange="changeFontSize(this.value)">
+                            <option value="small">Маленький</option>
+                            <option value="medium" selected>Средний</option>
+                            <option value="large">Большой</option>
+                        </select>
+                    </div>
+                    
+                    <div class="settings-group">
+                        <label class="settings-label">Автосохранение</label>
+                        <select class="settings-select" id="autoSaveSelect" onchange="toggleAutoSave(this.value)">
+                            <option value="true" selected>Включено</option>
+                            <option value="false">Выключено</option>
+                        </select>
+                    </div>
+
+                    <div class="form-actions">
+                        <button class="btn btn-secondary" onclick="closeSettings()">
+                            <i class="fas fa-times"></i>
+                            Закрыть
+                        </button>
+                        <button class="btn btn-primary" onclick="saveSettings()">
+                            <i class="fas fa-save"></i>
+                            Сохранить настройки
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Модальное окно просмотра изображения -->
+            <div class="image-modal" id="imageModal">
+                <div class="image-modal-content">
+                    <button class="image-modal-nav image-modal-prev" onclick="prevImage()">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <img id="modalImage" src="" alt="">
+                    <button class="image-modal-nav image-modal-next" onclick="nextImage()">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                    <button class="image-modal-close" onclick="closeImageModal()">
+                        <i class="fas fa-times"></i>
+                    </button>
+                    <div class="image-counter-modal" id="imageCounterModal">1 / 1</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
